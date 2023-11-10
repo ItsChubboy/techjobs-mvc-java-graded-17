@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static org.launchcode.techjobsmvc.controllers.ListController.columnChoices;
 
@@ -27,10 +28,11 @@ public class SearchController {
         return "search";
     }
 
-    @PostMapping(value = "/search/results")
+    @PostMapping(value = "results")
     public String displaySearchResults(Model model, @RequestParam String searchType, @RequestParam String searchTerm) {
         ArrayList<Job> jobs;
-        if (searchType.equals("all") || searchTerm.equals(' ')) {
+        model.addAttribute("columns", columnChoices);
+        if (searchTerm.equals("all") || searchTerm.equals(" ")) {
             jobs = JobData.findAll();
             model.addAttribute("title", "All Jobs");
         } else {
@@ -39,8 +41,24 @@ public class SearchController {
         }
         model.addAttribute("jobs", jobs);
 
-        return "/search/results";
+        return "search";
     }
+
+//    @PostMapping(value = "results")
+//    public String displaySearchResults(Model model, @RequestParam String searchType, @RequestParam String searchTerm) {
+//        ArrayList<Job> jobs;
+//        model.addAttribute("columns", columnChoices);
+//        if(searchTerm.equals("all") || searchTerm.equals("")) {
+//            jobs = JobData.findAll();
+//            model.addAttribute("title", "All Jobs");
+//        }else {
+//            jobs = JobData.findByColumnAndValue(searchType, searchTerm);
+//            model.addAttribute("title", "Jobs with " + columnChoices.get(searchType) + ": " + searchTerm);
+//        }
+//        model.addAttribute("jobs", jobs);
+//
+//        return "search";
+//    }
 
 }
 
